@@ -1,16 +1,11 @@
-# Keep 2 Todoapp
+# Keep 2 Todoist
 
 [![Test Status](https://github.com/jo-hoe/keep2todoist/workflows/test/badge.svg)](https://github.com/jo-hoe/keep2todoist/actions?workflow=test)
-[![Lint Status](https://github.com/jo-hoe/keep2todoist/workflows/lint/badge.svg)](https://github.com/jo-hoe/keep2todoist/actions?workflow=lint)
-[![Go Report Card](https://goreportcard.com/badge/github.com/jo-hoe/keep2todoist)](https://goreportcard.com/report/github.com/jo-hoe/keep2todoist)
-[![Coverage Status](https://coveralls.io/repos/github/jo-hoe/keep2todoist/badge.svg?branch=main)](https://coveralls.io/github/jo-hoe/keep2todoist?branch=main)
 
-Sync service to send google keep todo app
+This repository is provides a K8s chart for [keep2todoist](https://github.com/flecmart/keep2todoist) by [flecmart](https://github.com/flecmart).
 
-🚧 Work in Progress
+## 🚧 Work in Progress
 
-Get the lastest docker image version
-
-```bash
-docker inspect ghcr.io/flecmart/keep2todoist:latest | grep -i image.version
-```
+Implementation is currently on hold as an App password is required for the login.
+This App password is essentially a master token that provides access to the full google account.
+I consider the creation and usage of this token to risky as is provides access to the account with less security measures in place (missing 2FA, limitless access, predefined password entropy).

@@ -28,7 +28,6 @@ start-cluster: # starts k3d cluster and registry
 .PHONY: start-k3d
 start-k3d: start-cluster push-k3d ## run make `start-k3d api_key=<your_api_key>` start k3d cluster and deploy local code
 	@helm install ${IMAGE_NAME} ${ROOT_DIR}charts/${IMAGE_NAME}  \
-		--set image.repository=registry.localhost:5000/${IMAGE_NAME} --set image.tag=${IMAGE_VERSION} \
 		-f ${ROOT_DIR}dev/config.yaml
 
 .PHONY: stop-k3d
@@ -37,9 +36,3 @@ stop-k3d: ## stop K3d
 
 .PHONY: restart-k3d
 restart-k3d: stop-k3d start-k3d ## restarts K3d
-	
-.PHONY: push-k3d
-push-k3d: # build and push docker image to local registry
-	@docker build -f ${ROOT_DIR}Dockerfile . -t ${IMAGE_NAME}
-	@docker tag ${IMAGE_NAME} localhost:5000/${IMAGE_NAME}:${IMAGE_VERSION}
-	@docker push localhost:5000/${IMAGE_NAME}:${IMAGE_VERSION}
