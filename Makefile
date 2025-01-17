@@ -3,8 +3,8 @@ include help.mk
 # get root dir
 ROOT_DIR := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 PYTHON_DIR := ${ROOT_DIR}.venv/Scripts/
-IMAGE_NAME := "keep-to-todoapp"
-IMAGE_VERSION := "1.0.0"
+IMAGE_NAME := "keep2todoist"
+IMAGE_VERSION := 1.6.1
 
 .DEFAULT_GOAL := start-docker
 
@@ -12,17 +12,10 @@ IMAGE_VERSION := "1.0.0"
 pull:
 	@git -C ${ROOT_DIR} pull
 
-.PHONY: update
-update: pull 
-	go mod tidy
-
-.PHONY: test
-test: ## run all tests
-	go test $(ROOT_DIR)/...
 
 .PHONY: start-docker
 start-docker:
-	@docker compose -f ${ROOT_DIR}compose.yaml up --build 
+	@docker run -v ./config.yaml:/app/config.yaml --restart always ghcr.io/flecmart/${IMAGE_NAME}:${IMAGE_VERSION}
 
 .PHONY: generate-helm-docs
 generate-helm-docs: ## re-generates helm docs using docker
@@ -34,8 +27,6 @@ start-cluster: # starts k3d cluster and registry
 
 .PHONY: start-k3d
 start-k3d: start-cluster push-k3d ## run make `start-k3d api_key=<your_api_key>` start k3d cluster and deploy local code
-	@helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-	@helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack
 	@helm install ${IMAGE_NAME} ${ROOT_DIR}charts/${IMAGE_NAME}  \
 		--set image.repository=registry.localhost:5000/${IMAGE_NAME} --set image.tag=${IMAGE_VERSION} \
 		-f ${ROOT_DIR}dev/config.yaml
